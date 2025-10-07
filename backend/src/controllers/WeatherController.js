@@ -1,7 +1,7 @@
 import { getWeatherByCity } from "../api/WeatherApi.js";
 
 export async function fetchWeatherByCity(req, res) {
-    const city = req.body.city;
+    const city = req.query.city;
     if (!city) {
         return res.status(400).json({ error: 'City parameter is required' });
     }
