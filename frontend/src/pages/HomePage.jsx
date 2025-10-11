@@ -4,14 +4,21 @@ import WeatherCard from '../components/WeatherCard'
 // eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react"
 import axios from 'axios'
+import toast from 'react-hot-toast'
+import useWeatherStore from '../data/useWeatherStore.js'
+import { useNavigate } from 'react-router-dom'
 
 const HomePage = () => {
     const [city, setCity] = React.useState('')
     const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
+    const setWeather = useWeatherStore(state => state.setWeather)
+    let navigate = useNavigate();
 
     const onGetWeather = () => {
-        if (!city) return;
-        fetchWeather(city);
+        if (!city)
+            toast.error('Please enter a city name');
+        else
+          fetchWeather(city);
     };
 
     const fetchWeather = async (cityName) => {
@@ -20,7 +27,10 @@ const HomePage = () => {
                 params: { city: cityName }
             });
             console.log('Weather data:', response.data);
+            setWeather(response.data);
+            navigate('/WeatherPage');
         } catch (error) {
+            toast.error('Failed to fetch weather data. Please check the city name and try again.');
             console.error('Error fetching weather data:', error);
         }
     };
