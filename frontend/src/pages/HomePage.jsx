@@ -14,10 +14,11 @@ const HomePage = () => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
     const setWeather = useWeatherStore(state => state.setWeather)
     const { user, loading, checkAuth } = useAuthStore();
+    const token = localStorage.getItem("token");
     let navigate = useNavigate();
 
     React.useEffect(() => {
-      checkAuth(); // verify session when page loads
+      checkAuth(); 
     }, [checkAuth]);
 
     const onGetWeather = () => {
@@ -31,8 +32,12 @@ const HomePage = () => {
 
     const fetchWeather = async (cityName) => {
         try {
+          console.log(`token: ${token}`);
             const response = await axios.get(`${backendUrl}/api/weatherByCity`, {
-                params: { city: cityName }
+                params: { city: cityName },
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
             });
             console.log('Weather data:', response.data);
             setWeather(response.data);
