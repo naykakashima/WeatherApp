@@ -79,4 +79,13 @@ export const logout = (_, res) => {
     res.json({ success: true, message: "Logged out successfully" });
 }
 
+export const checkSession = async (req, res) => {
+    try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.json({ success: true, user });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 

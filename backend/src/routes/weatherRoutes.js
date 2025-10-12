@@ -1,6 +1,6 @@
 import express from "express"
 import { fetchWeatherByCity } from "../controllers/WeatherController.js"
-import { verifyToken } from "../middleware/authMiddleware.js"
+import { verifyToken } from "../middleware/verifyJwt.js"
 
 const router = express.Router()
 

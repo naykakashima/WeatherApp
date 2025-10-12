@@ -7,12 +7,18 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import useWeatherStore from '../data/useWeatherStore.js'
 import { useNavigate } from 'react-router-dom'
+import useAuthStore from "../data/useAuthStore.js";
 
 const HomePage = () => {
     const [city, setCity] = React.useState('')
     const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
     const setWeather = useWeatherStore(state => state.setWeather)
+    const { user, loading, checkAuth } = useAuthStore();
     let navigate = useNavigate();
+
+    React.useEffect(() => {
+      checkAuth(); // verify session when page loads
+    }, [checkAuth]);
 
     const onGetWeather = () => {
         if (!city)
@@ -20,6 +26,8 @@ const HomePage = () => {
         else
           fetchWeather(city);
     };
+
+    if (loading) return <p className="text-white">Checking session...</p>;
 
     const fetchWeather = async (cityName) => {
         try {
@@ -48,7 +56,7 @@ const HomePage = () => {
         >
           Welcome to the Weather App
         </motion.h1>
-        <WeatherCard city={city} setCity={setCity} onGetWeather={onGetWeather}/>
+        <WeatherCard city={city} setCity={setCity} onGetWeather={onGetWeather} disabled={!user}/>
       </div>
     </div>
   )
