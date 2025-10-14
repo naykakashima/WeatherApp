@@ -4,7 +4,7 @@ import Navbar from './../components/Navbar';
 import { motion } from 'motion/react';
 
 const RegisterPage = () => {
-  const [name, setName] = React.useState('');
+  const [username, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const backendurl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
@@ -12,12 +12,13 @@ const RegisterPage = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try{
+      console.log("Registering user:", { username, email, password });
       const response = await fetch(`${backendurl}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ username, email, password }),
       });
-      console.log("Registration response:", response);
+      console.log("Registration response:", response);  ` `
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('token', data.token);
@@ -58,7 +59,7 @@ const RegisterPage = () => {
               <input
                 type="text"
                 className="input input-bordered"
-                value={name}
+                value={username}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your name"
                 required
