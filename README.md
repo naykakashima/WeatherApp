@@ -31,7 +31,6 @@ cd weather-app
 ```
 cd backend
 npm install
-cp .env.example .env  # add your MongoDB URI and WeatherAPI key
 npm run dev
 ```
 
